@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9つのペルソナ診断</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+     <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            /* font-family: Arial, sans-serif; */
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .slide {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .choice {
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .choice:hover {
+            background-color: #b4f1ed;
+        }
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #restart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #08bcb0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="slide1" class="slide">
+        <h1>自分磨きに積極的ですか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide2')">はい</div>
+            <div class="choice" onclick="showSlide('slide3')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide2" class="slide" style="display:none;">
+        <h1>ファッションと美容、どちらに重点を置きますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide4')">ファッション</div>
+            <div class="choice" onclick="showSlide('slide5')">美容</div>
+        </div>
+    </div>
+
+    <div id="slide3" class="slide" style="display:none;">
+        <h1>趣味や体験を重視しますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide6')">はい</div>
+            <div class="choice" onclick="showSlide('slide7')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide4" class="slide" style="display:none;">
+        <h1>高級ブランドにこだわりますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide8')">はい</div>
+            <div class="choice" onclick="showSlide('slide9')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide5" class="slide" style="display:none;">
+        <h1>スキンケアに特に力を入れていますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide10')">はい</div>
+            <div class="choice" onclick="showSlide('slide11')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide6" class="slide" style="display:none;">
+        <h1>新しい経験を求めますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide12')">はい</div>
+            <div class="choice" onclick="showSlide('slide13')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide7" class="slide" style="display:none;">
+        <h1>特定の対象に熱中する傾向がありますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showSlide('slide14')">はい</div>
+            <div class="choice" onclick="showSlide('slide15')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide8" class="slide" style="display:none;">
+        <h1>自己表現を重視しますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('ハイブランド取り入れ型プチセレブリティ')">はい</div>
+            <div class="choice" onclick="showResult('ハイブランド取り入れ型プチセレブリティ')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide9" class="slide" style="display:none;">
+        <h1>最新トレンドを追いかけますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('トレンドフォロワー')">はい</div>
+            <div class="choice" onclick="showResult('なんでも全力投球型ファッショニスタ')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide10" class="slide" style="display:none;">
+        <h1>美容の知識を深めることに熱心ですか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('スキンケア命！ビューティーエキスパート')">はい</div>
+            <div class="choice" onclick="showResult('ビューティーマルチパッショネイト')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide11" class="slide" style="display:none;">
+        <h1>メイクやヘアスタイルなど、様々な美容分野に興味がありますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('ビューティーマルチパッショネイト')">はい</div>
+            <div class="choice" onclick="showResult('自分への投資を惜しまない！セルフラバー')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide12" class="slide" style="display:none;">
+        <h1>旅行や冒険が好きですか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('体験重視！アクティブトラベラー')">はい</div>
+            <div class="choice" onclick="showResult('ライフスタイルホビーニスト')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide13" class="slide" style="display:none;">
+        <h1>創作活動や自己表現を楽しみますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('ライフスタイルホビーニスト')">はい</div>
+            <div class="choice" onclick="showResult('自分への投資を惜しまない！セルフラバー')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide14" class="slide" style="display:none;">
+        <h1>アイドルや芸能人のファン活動に熱心ですか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('自分よりも推し優先！推し活ラバー')">はい</div>
+            <div class="choice" onclick="showResult('ライフスタイルホビーニスト')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="slide15" class="slide" style="display:none;">
+        <h1>自己啓発や自己投資に興味がありますか？</h1>
+        <div class="choices">
+            <div class="choice" onclick="showResult('自分への投資を惜しまない！セルフラバー')">はい</div>
+            <div class="choice" onclick="showResult('ライフスタイルホビーニスト')">いいえ</div>
+        </div>
+    </div>
+
+    <div id="resultSlide" class="slide" style="display:none;">
+        <h1>診断結果</h1>
+        <div id="result"></div>
+        <button id="restart" onclick="restart()">もう一度診断する</button>
+    </div>
+
+    <script>
+        function showSlide(slideId) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.style.display = 'none';
+            });
+            document.getElementById(slideId).style.display = 'flex';
+        }
+
+        function showResult(persona) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.style.display = 'none';
+            });
+            document.getElementById('resultSlide').style.display = 'flex';
+            document.getElementById('result').textContent = 'あなたは「' + persona + '」タイプです！';
+        }
+
+        function restart() {
+            showSlide('slide1');
+        }
+    </script>
+</body>
+</html>
