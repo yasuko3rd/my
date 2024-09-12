@@ -118,16 +118,8 @@
     <div id="slide8" class="slide" style="display:none;">
         <h1>自己表現を重視しますか？</h1>
         <div class="choices">
-            <div class="choice" onclick="showResult('ハイブランド取り入れ型プチセレブリティ','ファッションに関する情報収集はInstagramに加え雑誌もチェック。
-            自由に使えるお金はファッションに使うことが多いけれど、
-            美容にも抜かりは無い。おいしいものにも目が無いので食にも投資。
-            洋服の購入場所は百貨店、ファッションビル、通販サイトなど様々で、
-            自分に合ったものを探すことが得意。')">はい</div>
-            <div class="choice" onclick="showResult('ハイブランド取り入れ型プチセレブリティ','ファッションに関する情報収集はInstagramに加え雑誌もチェック。
-            自由に使えるお金はファッションに使うことが多いけれど、
-            美容にも抜かりは無い。おいしいものにも目が無いので食にも投資。
-            洋服の購入場所は百貨店、ファッションビル、通販サイトなど様々で、
-            自分に合ったものを探すことが得意。')">いいえ</div>
+            <div class="choice" onclick="showResult('ハイブランド取り入れ型プチセレブリティ')">はい</div>
+            <div class="choice" onclick="showResult('ハイブランド取り入れ型プチセレブリティ')">いいえ</div>
         </div>
     </div>
 
@@ -201,13 +193,12 @@
             document.getElementById(slideId).style.display = 'flex';
         }
 
-        function showResult(persona, description) {
+        function showResult(persona) {
             document.querySelectorAll('.slide').forEach(slide => {
                 slide.style.display = 'none';
             });
             document.getElementById('resultSlide').style.display = 'flex';
             document.getElementById('result').textContent = 'あなたは「' + persona + '」タイプです！';
-            document.getElementById('result').textContent = 'description';
             
         }
 
