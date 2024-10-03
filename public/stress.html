@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ストレスシミュレーター</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card-description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #c06dda;
+            border-radius: 4px;
+            text-align: center;
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+        }
+        .button {
+            width: 100%;
+            padding: 10px;
+            background-color: #c06dda;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #a755c2;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 10px;
+            background-color: #c06dda;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .result {
+            text-align: center;
+        }
+        .emoji {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="card"></div>
+
+    <script>
+        var questions = [
+            { text: "仕事の締め切りが迫っています。どうしますか？", options: [
+                { text: "徹夜してでも終わらせる", stress: 15 },
+                { text: "できる範囲で進め、上司に相談する", stress: 5 },
+                { text: "同僚に協力を求める", stress: 0 }
+            ]},
+            { text: "友人から女子会に誘われました。どうしますか？", options: [
+                { text: "断る", stress: 5 },
+                { text: "短時間だけ参加する", stress: 0 },
+                { text: "朝まで盛り上がる", stress: 10 }
+            ]},
+            { text: "休日の過ごし方は？", options: [
+                { text: "家でゆっくりする", stress: -5 },
+                { text: "ショッピングに出かける", stress: 0 },
+                { text: "溜まった家事をこなす", stress: 10 }
+            ]},
+            { text: "気分が落ち込んでいます。どうしますか？", options: [
+                { text: "友人とおしゃべりする", stress: -5 },
+                { text: "エステに行く", stress: -10 },
+                { text: "我慢して普段通り過ごす", stress: 10 }
+            ]},
+            { text: "新しいプロジェクトが始まります。どう取り組みますか？", options: [
+                { text: "リーダーシップを取って積極的に進める", stress: 10 },
+                { text: "チームメンバーと協力しながら進める", stress: 0 },
+                { text: "できるだけ目立たないようにする", stress: 5 }
+            ]},
+            { text: "体重が増えてきました。どうしますか？", options: [
+                { text: "厳しいダイエットを始める", stress: 15 },
+                { text: "適度な運動を始める", stress: -5 },
+                { text: "気にせず好きなものを食べる", stress: 5 }
+            ]},
+            { text: "恋愛関係でトラブルが起きました。どうしますか？", options: [
+                { text: "一人で悩む", stress: 15 },
+                { text: "友人に相談する", stress: -5 },
+                { text: "相手と話し合う", stress: 5 }
+            ]},
+            { text: "職場で意見の対立がありました。どう対処しますか？", options: [
+                { text: "自分の意見を強く主張する", stress: 10 },
+                { text: "妥協点を探る", stress: 0 },
+                { text: "相手の意見に従う", stress: 5 }
+            ]},
+            { text: "久しぶりの同窓会に誘われました。どうしますか？", options: [
+                { text: "張り切って参加する", stress: 5 },
+                { text: "気軽な気持ちで参加する", stress: 0 },
+                { text: "欠席する", stress: -5 }
+            ]},
+            { text: "長期の休暇が取れそうです。どう過ごしますか？", options: [
+                { text: "海外旅行に行く", stress: -10 },
+                { text: "自宅でゆっくり過ごす", stress: -5 },
+                { text: "資格取得のために勉強する", stress: 10 }
+            ]}
+        ];
+
+        var characterEmojis = {
+            relaxed: "😌🧘‍♀️",
+            balanced: "😊🏃‍♀️",
+            busy: "🤔💼",
+            stressed: "😓📊",
+            fighter: "💪😤"
+        };
+
+        var playerName = '';
+        var stress = 50;
+        var currentQuestion = 0;
+
+        function renderStartScreen() {
+            var app = document.getElementById('app');
+            app.innerHTML = '<div class="card-title">ストレスシミュレーター</div>' +
+                '<div class="card-description">あなたのストレス耐性をチェック！</div>' +
+                '<input type="text" id="nameInput" class="input" placeholder="あなたの名前を入力してください">' +
+                '<button onclick="startGame()" class="button">シミュレーション開始</button>';
+        }
+
+        function startGame() {
+            playerName = document.getElementById('nameInput').value;
+            if (playerName.trim() !== '') {
+                renderQuestion();
+            }
+        }
+
+        function renderQuestion() {
+            var app = document.getElementById('app');
+            var question = questions[currentQuestion];
+            var html = '<div class="card-title">ストレスシミュレーター</div>' +
+                '<div class="card-description">' + playerName + 'さんの日常生活</div>' +
+                '<div class="progress-container">' +
+                '<div class="progress-bar" style="width: ' + stress + '%;"></div>' +
+                '</div>' +
+                '<div class="question">質問 ' + (currentQuestion + 1) + '/10: ' + question.text + '</div>';
+            
+            for (var i = 0; i < question.options.length; i++) {
+                html += '<button onclick="handleAnswer(' + i + ')" class="button">' +
+                    question.options[i].text + '</button>';
+            }
+            
+            app.innerHTML = html;
+        }
+
+        function handleAnswer(optionIndex) {
+            var question = questions[currentQuestion];
+            stress += question.options[optionIndex].stress;
+            stress = Math.max(0, Math.min(100, stress));
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                renderQuestion();
+            } else {
+                renderResult();
+            }
+        }
+
+        function getStressLevel() {
+            if (stress < 30) return "リラックス";
+            if (stress < 70) return "普通";
+            return "ストレスフル";
+        }
+
+        function getStressCharacter() {
+            if (stress < 30) return { name: "ゆるふわライフマスター", emoji: characterEmojis.relaxed };
+            if (stress < 50) return { name: "颯爽としたトレンドセッター", emoji: characterEmojis.balanced };
+            if (stress < 70) return { name: "忙しいけど頑張るマルチタスカー", emoji: characterEmojis.busy };
+            if (stress < 90) return { name: "燃え尽き寸前のスーパーウーマン", emoji: characterEmojis.stressed };
+            return { name: "ストレスと闘うメンタルファイター", emoji: characterEmojis.fighter };
+        }
+
+        function getAdvice() {
+            if (stress < 30) return "素晴らしいバランス感覚ですね。周りにも良い影響を与えているはず。たまには自分へのご褒美も忘れずに！";
+            if (stress < 70) return "良いペースで過ごせていますね。でも、たまには思い切ってリフレッシュする時間を作るのも大切です。";
+            return "頑張りすぎていませんか？たまには「NO」と言うことも大切です。リラックスする時間を意識的に作ってみましょう。";
+        }
+
+        function renderResult() {
+            var app = document.getElementById('app');
+            var character = getStressCharacter();
+            app.innerHTML = '<div class="card-title">シミュレーション結果</div>' +
+                '<div class="result">' +
+                '<p>' + playerName + 'さんのストレスレベル: ' + stress + '%</p>' +
+                '<div class="progress-container">' +
+                '<div class="progress-bar" style="width: ' + stress + '%;"></div>' +
+                '</div>' +
+                '<p>ストレス状態: ' + getStressLevel() + '</p>' +
+                '<div class="emoji">' + character.emoji + '</div>' +
+                '<p>あなたは『' + character.name + '』タイプです！</p>' +
+                '<p>' + getAdvice() + '</p>' +
+                '<button onclick="resetGame()" class="button">もう一度チャレンジ</button>' +
+                '</div>';
+        }
+
+        function resetGame() {
+            playerName = '';
+            stress = 50;
+            currentQuestion = 0;
+            renderStartScreen();
+        }
+
+        // 初期画面の表示
+        renderStartScreen();
+    </script>
+</body>
+</html>
